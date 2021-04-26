@@ -40,8 +40,14 @@ class _WhatsNewState extends State<WhatsNew> {
     );
 
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.25,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
+      height: MediaQuery
+          .of(context)
+          .size
+          .height * 0.25,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: ExactAssetImage('assets/images/placeholder_bg.png'),
@@ -76,6 +82,7 @@ class _WhatsNewState extends State<WhatsNew> {
       ),
     );
   }
+
   Widget _drawTopStories() {
     return Container(
       color: Colors.grey.shade100,
@@ -92,19 +99,45 @@ class _WhatsNewState extends State<WhatsNew> {
 
               child: FutureBuilder(
                 future: postsAPI.fetchWhatsNew(),
-                builder: ( context, AsyncSnapshot snapShot ){
-                  Post post1 = snapShot.data[0];
-                  Post post2 = snapShot.data[1];
-                  Post post3 = snapShot.data[2];
-                  return Column(
-                    children: <Widget>[
-                      _drawSingleRow( post1 ),
-                      _drawDivider(),
-                      _drawSingleRow( post2 ),
-                      _drawDivider(),
-                      _drawSingleRow( post3 ),
-                    ],
-                  );
+                builder: (context, AsyncSnapshot snapShot) {
+                  switch (snapShot.connectionState) {
+                    case ConnectionState.waiting:
+                      return _loading();
+                      break;
+                    case ConnectionState.active:
+                      return _loading();
+                      break;
+                    case ConnectionState.none:
+                      return _connectionError();
+                      break;
+                    case ConnectionState.done:
+                      if (snapShot.error != null) {
+                        return _error(snapShot.error);
+                      } else {
+                        if (snapShot.hasData) {
+                          List<Post> posts = snapShot.data;
+                          if (posts.length >= 3) {
+                            Post post1 = snapShot.data[0];
+                            Post post2 = snapShot.data[1];
+                            Post post3 = snapShot.data[2];
+                            return Column(
+                              children: <Widget>[
+                                _drawSingleRow(post1),
+                                _drawDivider(),
+                                _drawSingleRow(post2),
+                                _drawDivider(),
+                                _drawSingleRow(post3),
+                              ],
+                            );
+                          } else {
+                            return _noData();
+                          }
+                        } else {
+                          return _noData();
+                        }
+                      }
+                      break;
+                  }
                 },
               ),
             ),
@@ -147,11 +180,11 @@ class _WhatsNewState extends State<WhatsNew> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           SizedBox(
-          //   child: Image(
-          //     image: ExactAssetImage('assets/images/placeholder_bg.png'),
-          //     fit: BoxFit.cover,
-          //   ),
-          child: Image.network(post.featuredImage,fit: BoxFit.cover ,),
+            //   child: Image(
+            //     image: ExactAssetImage('assets/images/placeholder_bg.png'),
+            //     fit: BoxFit.cover,
+            //   ),
+            child: Image.network(post.featuredImage, fit: BoxFit.cover,),
 
             width: 100,
             height: 100,
@@ -163,7 +196,7 @@ class _WhatsNewState extends State<WhatsNew> {
             child: Column(
               children: <Widget>[
                 Text(
-                post.title,
+                  post.title,
                   maxLines: 2,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
@@ -173,12 +206,13 @@ class _WhatsNewState extends State<WhatsNew> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Michael Adams',style: TextStyle(fontSize: 12),),
+                    Text('Michael Adams', style: TextStyle(fontSize: 12),),
                     Row(
                       children: <Widget>[
                         Icon(Icons.timer),
                         // Text('15 min'),
-                        Text( _parseHumanDateTime( post.dateWritten ),style:TextStyle(fontSize: 10), ),
+                        Text(_parseHumanDateTime(post.dateWritten),
+                          style: TextStyle(fontSize: 10),),
                       ],
                     ),
                   ],
@@ -201,32 +235,31 @@ class _WhatsNewState extends State<WhatsNew> {
     );
   }
 
-  Widget _drawRecentUpdates(){
+  Widget _drawRecentUpdates() {
     return Padding(
-        padding: EdgeInsets.all(8),
-    child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-    Padding(
-    padding: const EdgeInsets.only(left: 16, bottom: 8, top: 8),
-    child: _drawSectionTitle('Recent Updates'),
-    ),
-    _drawRecentUpdatesCard(Colors.deepOrange),
-    _drawRecentUpdatesCard(Colors.teal),
-    SizedBox(
-    height: 48,
-    ),
-    ],
-    ),
+      padding: EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 16, bottom: 8, top: 8),
+            child: _drawSectionTitle('Recent Updates'),
+          ),
+          _drawRecentUpdatesCard(Colors.deepOrange),
+          _drawRecentUpdatesCard(Colors.teal),
+          SizedBox(
+            height: 48,
+          ),
+        ],
+      ),
     );
-    }
+  }
 
 
-
-  String _parseHumanDateTime( String dateTime ){
-    Duration timeAgo = DateTime.now().difference( DateTime.parse(dateTime) );
-    DateTime theDifference = DateTime.now().subtract( timeAgo );
-    return timeago.format( theDifference );
+  String _parseHumanDateTime(String dateTime) {
+    Duration timeAgo = DateTime.now().difference(DateTime.parse(dateTime));
+    DateTime theDifference = DateTime.now().subtract(timeAgo);
+    return timeago.format(theDifference);
   }
 
   Widget _drawRecentUpdatesCard(Color color) {
@@ -242,7 +275,10 @@ class _WhatsNewState extends State<WhatsNew> {
               ),
             ),
             width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.25,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.25,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 16, left: 16),
@@ -277,7 +313,7 @@ class _WhatsNewState extends State<WhatsNew> {
                   color: Colors.grey,
                   size: 18,
                 ),
-                SizedBox( width: 4, ),
+                SizedBox(width: 4,),
                 Text(
                   '15 Min',
                   style: TextStyle(
@@ -290,6 +326,36 @@ class _WhatsNewState extends State<WhatsNew> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _loading() {
+    return Container(
+      padding: EdgeInsets.only(top: 16, bottom: 16),
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  Widget _connectionError() {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Text('Connection Error!!!!'),
+    );
+  }
+
+  Widget _error(var error) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Text(error.toString()),
+    );
+  }
+
+  Widget _noData() {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Text('No Data Available!'),
     );
   }
 }
