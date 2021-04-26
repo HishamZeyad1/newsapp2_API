@@ -3,3 +3,4 @@ String all_authors_api = "/api/authors";
 
 String all_categories_api = "/api/categories";
 String whats_new_api = "/api/posts/categories/7";
+String recent_updates_api="/api/posts/categories/2";

@@ -142,23 +142,7 @@ class _WhatsNewState extends State<WhatsNew> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, bottom: 8, top: 8),
-                  child: _drawSectionTitle('Recent Updates'),
-                ),
-                _drawRecentUpdatesCard(Colors.deepOrange),
-                _drawRecentUpdatesCard(Colors.teal),
-                SizedBox(
-                  height: 48,
-                ),
-              ],
-            ),
-          ),
+
         ],
       ),
     );
@@ -238,19 +222,45 @@ class _WhatsNewState extends State<WhatsNew> {
   Widget _drawRecentUpdates() {
     return Padding(
       padding: EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 16, bottom: 8, top: 8),
-            child: _drawSectionTitle('Recent Updates'),
-          ),
-          _drawRecentUpdatesCard(Colors.deepOrange),
-          _drawRecentUpdatesCard(Colors.teal),
-          SizedBox(
-            height: 48,
-          ),
-        ],
+      child: FutureBuilder(
+        future: postsAPI.fetchRecentUpdates(),
+        builder: (context, AsyncSnapshot snapShot) {
+          switch (snapShot.connectionState) {
+            case ConnectionState.waiting:
+              return _loading();
+              break;
+            case ConnectionState.active:
+              return _loading();
+              break;
+            case ConnectionState.none:
+              return _connectionError();
+              break;
+            case ConnectionState.done:
+              if (snapShot.error != null) {
+                return _error(snapShot.error);
+              } else {
+                if (snapShot.hasData) {
+                    return Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16, bottom: 8, top: 8),
+                          child: _drawSectionTitle('Recent Updates'),
+                        ),
+                        _drawRecentUpdatesCard(Colors.deepOrange , snapShot.data[0]),
+                        _drawRecentUpdatesCard(Colors.teal , snapShot.data[1]),
+                        SizedBox(
+                          height: 48,
+                        ),
+
+                      ],
+                    );
+                  } else {
+                  return _noData();
+                }
+              }
+              break;
+          }
+        },
       ),
     );
   }
@@ -262,7 +272,7 @@ class _WhatsNewState extends State<WhatsNew> {
     return timeago.format(theDifference);
   }
 
-  Widget _drawRecentUpdatesCard(Color color) {
+  Widget _drawRecentUpdatesCard(Color color,  Post post) {
     return Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,7 +280,8 @@ class _WhatsNewState extends State<WhatsNew> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: ExactAssetImage('assets/images/placeholder_bg.png'),
+                // image: ExactAssetImage('assets/images/placeholder_bg.png'),
+                image: NetworkImage( post.featuredImage ),
                 fit: BoxFit.cover,
               ),
             ),
@@ -299,8 +310,8 @@ class _WhatsNewState extends State<WhatsNew> {
           ),
           Padding(
             padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-            child: Text(
-              'Vettel is Ferrari Number One - Hamilton',
+            child: Text(              post.title,
+              // 'Vettel is Ferrari Number One - Hamilton',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
           ),
@@ -315,7 +326,9 @@ class _WhatsNewState extends State<WhatsNew> {
                 ),
                 SizedBox(width: 4,),
                 Text(
-                  '15 Min',
+                  // '15 Min',
+                  _parseHumanDateTime( post.dateWritten ),
+
                   style: TextStyle(
                       color: Colors.grey,
                       fontSize: 14
