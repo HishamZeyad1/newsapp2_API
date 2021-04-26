@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
 
+import 'package:news_app2/api/posts_api.dart';
+import 'dart:async';
+import 'package:timeago/timeago.dart' as timeago;
+import 'package:news_app2/models/post.dart';
+
 class WhatsNew extends StatefulWidget {
   @override
   _WhatsNewState createState() => _WhatsNewState();
 }
 
 class _WhatsNewState extends State<WhatsNew> {
+  late PostsAPI postsAPI;
+
   @override
   Widget build(BuildContext context) {
+    postsAPI = PostsAPI();
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _drawHeader(),
           _drawTopStories(),
+          _drawRecentUpdates(),
+
         ],
       ),
     );
@@ -78,14 +89,23 @@ class _WhatsNewState extends State<WhatsNew> {
           Padding(
             padding: EdgeInsets.all(8.0),
             child: Card(
-              child: Column(
-                children: <Widget>[
-                  _drawSingleRow(),
-                  _drawDivider(),
-                  _drawSingleRow(),
-                  _drawDivider(),
-                  _drawSingleRow(),
-                ],
+
+              child: FutureBuilder(
+                future: postsAPI.fetchWhatsNew(),
+                builder: ( context, AsyncSnapshot snapShot ){
+                  Post post1 = snapShot.data[0];
+                  Post post2 = snapShot.data[1];
+                  Post post3 = snapShot.data[2];
+                  return Column(
+                    children: <Widget>[
+                      _drawSingleRow( post1 ),
+                      _drawDivider(),
+                      _drawSingleRow( post2 ),
+                      _drawDivider(),
+                      _drawSingleRow( post3 ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -120,19 +140,21 @@ class _WhatsNewState extends State<WhatsNew> {
   }
 
 
-  Widget _drawSingleRow() {
+  Widget _drawSingleRow(Post post) {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           SizedBox(
-            child: Image(
-              image: ExactAssetImage('assets/images/placeholder_bg.png'),
-              fit: BoxFit.cover,
-            ),
-            width: 124,
-            height: 124,
+          //   child: Image(
+          //     image: ExactAssetImage('assets/images/placeholder_bg.png'),
+          //     fit: BoxFit.cover,
+          //   ),
+          child: Image.network(post.featuredImage,fit: BoxFit.cover ,),
+
+            width: 100,
+            height: 100,
           ),
           SizedBox(
             width: 16,
@@ -141,7 +163,7 @@ class _WhatsNewState extends State<WhatsNew> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'The World Global Warming Annual Summit',
+                post.title,
                   maxLines: 2,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
@@ -151,11 +173,12 @@ class _WhatsNewState extends State<WhatsNew> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Michael Adams'),
+                    Text('Michael Adams',style: TextStyle(fontSize: 12),),
                     Row(
                       children: <Widget>[
                         Icon(Icons.timer),
-                        Text('15 min'),
+                        // Text('15 min'),
+                        Text( _parseHumanDateTime( post.dateWritten ),style:TextStyle(fontSize: 10), ),
                       ],
                     ),
                   ],
@@ -176,6 +199,34 @@ class _WhatsNewState extends State<WhatsNew> {
           fontWeight: FontWeight.w600,
           fontSize: 16),
     );
+  }
+
+  Widget _drawRecentUpdates(){
+    return Padding(
+        padding: EdgeInsets.all(8),
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+    Padding(
+    padding: const EdgeInsets.only(left: 16, bottom: 8, top: 8),
+    child: _drawSectionTitle('Recent Updates'),
+    ),
+    _drawRecentUpdatesCard(Colors.deepOrange),
+    _drawRecentUpdatesCard(Colors.teal),
+    SizedBox(
+    height: 48,
+    ),
+    ],
+    ),
+    );
+    }
+
+
+
+  String _parseHumanDateTime( String dateTime ){
+    Duration timeAgo = DateTime.now().difference( DateTime.parse(dateTime) );
+    DateTime theDifference = DateTime.now().subtract( timeAgo );
+    return timeago.format( theDifference );
   }
 
   Widget _drawRecentUpdatesCard(Color color) {

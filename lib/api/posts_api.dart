@@ -29,9 +29,13 @@ class PostsAPI {
             categoryId: item["category_id"]
         );
         posts.add(post);
-        print( post.id+" "+post.content+" "+post.dateWritten+" "+post.featuredImage
+        print( //post.id+" "+
+            // post.content+" "+
+             //post.dateWritten+" "+post.featuredImage
             // +" "+post.votersUp.length.toString()+" "+post.votersUp[0].toString()
-            // +" "+post.userId.toString() +" "+post.categoryId.toString()
+            // +" "+
+            // post.userId.toString() +" "+post.categoryId.toString()
+                post.title
         );
 
 

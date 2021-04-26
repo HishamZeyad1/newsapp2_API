@@ -37,8 +37,8 @@ class _HomeScreenState extends State<HomeScreen>with SingleTickerProviderStateMi
   @override
   Widget build(BuildContext context) {
     //authorsAPI.fetchAllAuthors();
-    //categoriesAPI.fetchCategories();
-     postsAPI.fetchWhatsNew();
+    // categoriesAPI.fetchCategories();
+    //postsAPI.fetchWhatsNew();
     return Scaffold(
       appBar: AppBar(
         title: Text("Explore"),
