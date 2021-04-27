@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:news_app2/api/categories_api.dart';
 import 'package:news_app2/api/posts_api.dart';
+import 'package:news_app2/pages/about.dart';
+import 'package:news_app2/pages/contact.dart';
+import 'package:news_app2/pages/help.dart';
+import 'package:news_app2/pages/settings.dart';
 
 import '../home_tabs/favourites.dart';
 import '../home_tabs/popular.dart';
@@ -85,6 +89,7 @@ class _HomeScreenState extends State<HomeScreen>with SingleTickerProviderStateMi
           PopupMenuItem<PopOutMenu>(
             value: PopOutMenu.ABOUT,
             child: Text('ABOUT'),
+
           ),
           PopupMenuItem<PopOutMenu>(
             value: PopOutMenu.CONTACT,
@@ -102,6 +107,28 @@ class _HomeScreenState extends State<HomeScreen>with SingleTickerProviderStateMi
       },
       onSelected: (PopOutMenu menu) {
         // TODO :
+        switch( menu ){
+          case PopOutMenu.ABOUT :
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return AboutUs();
+            }));
+            break;
+          case PopOutMenu.SETTINGS:
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return Settings();
+            }));
+            break;
+          case PopOutMenu.CONTACT :
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ContactUs();
+            }));
+            break;
+          case PopOutMenu.HELP :
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return Help();
+            }));
+            break;
+        }
       },
       icon: Icon(Icons.more_vert),
     );

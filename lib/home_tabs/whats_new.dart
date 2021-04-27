@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app2/Screens/single_post.dart';
 
 import 'package:news_app2/api/posts_api.dart';
 import 'dart:async';
@@ -64,49 +65,56 @@ class _WhatsNewState extends State<WhatsNew> {
               Random random = Random();
               int randomIndex = random.nextInt(posts.length);
               Post post = posts[randomIndex];
-              return Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.25,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    // image: ExactAssetImage('assets/images/placeholder_bg.png'),
-                    image: NetworkImage(post.featuredImage),
-                    fit: BoxFit.cover,
+              return GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: ( context ){
+                    return SinglePost( post );
+                  }) );
+                } ,
+                child: Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.25,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      // image: ExactAssetImage('assets/images/placeholder_bg.png'),
+                      image: NetworkImage(post.featuredImage),
+                      fit: BoxFit.cover,
+                    ),
                   ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 48, right: 48),
+                          child: Text(
+                            // 'How Terriers & Royals Gatecrashed Final',
+                            post.title,
+                            style: _headerTitle,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 34, right: 34),
+                          child: Text(
+                            // 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.',
+                            post.content.substring(0,100),
+                            style: _headerDescription,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),),
                 ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 48, right: 48),
-                        child: Text(
-                          // 'How Terriers & Royals Gatecrashed Final',
-                          post.title,
-                          style: _headerTitle,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 34, right: 34),
-                        child: Text(
-                          // 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.',
-                          post.content.substring(0,100),
-                          style: _headerDescription,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),),
               );
             }
         }
@@ -191,51 +199,57 @@ class _WhatsNewState extends State<WhatsNew> {
   Widget _drawSingleRow(Post post) {
     return Padding(
       padding: const EdgeInsets.all(12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          SizedBox(
-            //   child: Image(
-            //     image: ExactAssetImage('assets/images/placeholder_bg.png'),
-            //     fit: BoxFit.cover,
-            //   ),
-            child: Image.network(post.featuredImage, fit: BoxFit.cover,),
-
-            width: 100,
-            height: 100,
-          ),
-          SizedBox(
-            width: 16,
-          ),
-          Expanded(
-            child: Column(
-              children: <Widget>[
-                Text(
-                  post.title,
-                  maxLines: 2,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(
-                  height: 18,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('Michael Adams', style: TextStyle(fontSize: 12),),
-                    Row(
-                      children: <Widget>[
-                        Icon(Icons.timer),
-                        // Text('15 min'),
-                        Text(_parseHumanDateTime(post.dateWritten),
-                          style: TextStyle(fontSize: 10),),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+      child: GestureDetector(
+        onTap: (){
+          Navigator.push( context, MaterialPageRoute(builder: ( context ){
+            return SinglePost( post );
+          }));
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            SizedBox(
+              //   child: Image(
+              //     image: ExactAssetImage('assets/images/placeholder_bg.png'),
+              //     fit: BoxFit.cover,
+              //   ),
+              child: Image.network(post.featuredImage, fit: BoxFit.cover,),
+              width: 100,
+              height: 100,
             ),
-          ),
-        ],
+            SizedBox(
+              width: 16,
+            ),
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    post.title,
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('Michael Adams', style: TextStyle(fontSize: 12),),
+                      Row(
+                        children: <Widget>[
+                          Icon(Icons.timer),
+                          // Text('15 min'),
+                          Text(_parseHumanDateTime(post.dateWritten),
+                            style: TextStyle(fontSize: 10),),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -316,70 +330,77 @@ class _WhatsNewState extends State<WhatsNew> {
 
   Widget _drawRecentUpdatesCard(Color color,  Post post) {
     return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                // image: ExactAssetImage('assets/images/placeholder_bg.png'),
-                image: NetworkImage( post.featuredImage ),
-                fit: BoxFit.cover,
-              ),
-            ),
-            width: double.infinity,
-            height: MediaQuery
-                .of(context)
-                .size
-                .height * 0.25,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16, left: 16),
-            child: Container(
-              padding: EdgeInsets.only(left: 24, right: 24, top: 2, bottom: 2),
+      child: GestureDetector(
+        onTap: (){
+          Navigator.push(context, MaterialPageRoute(builder: ( context   ){
+            return SinglePost(post);
+          }));
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
               decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                'SPORT',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
+                image: DecorationImage(
+                  // image: ExactAssetImage('assets/images/placeholder_bg.png'),
+                  image: NetworkImage( post.featuredImage ),
+                  fit: BoxFit.cover,
                 ),
               ),
+              width: double.infinity,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.25,
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-            child: Text(              post.title,
-              // 'Vettel is Ferrari Number One - Hamilton',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.timer,
-                  color: Colors.grey,
-                  size: 18,
+            Padding(
+              padding: const EdgeInsets.only(top: 16, left: 16),
+              child: Container(
+                padding: EdgeInsets.only(left: 24, right: 24, top: 2, bottom: 2),
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(4),
                 ),
-                SizedBox(width: 4,),
-                Text(
-                  // '15 Min',
-                  _parseHumanDateTime( post.dateWritten ),
-
+                child: Text(
+                  'SPORT',
                   style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+              child: Text(              post.title,
+                // 'Vettel is Ferrari Number One - Hamilton',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.timer,
+                    color: Colors.grey,
+                    size: 18,
+                  ),
+                  SizedBox(width: 4,),
+                  Text(
+                    // '15 Min',
+                    _parseHumanDateTime( post.dateWritten ),
+
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app2/Screens/single_post.dart';
 import 'package:news_app2/api/posts_api.dart';
 import 'package:news_app2/models/post.dart';
 import 'package:news_app2/utilities/data_utilities.dart';
@@ -55,53 +56,60 @@ class _PopularState extends State<Popular> {
   Widget _drawSingleRow(Post post) {
     return Padding(
       padding: const EdgeInsets.all(12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          SizedBox(
-            child: Image(
-              // image: ExactAssetImage('assets/images/placeholder_bg.png'),
-              image: NetworkImage( post.featuredImage ),
-              fit: BoxFit.cover,
+      child: GestureDetector(
+        onTap: (){
+          Navigator.push(context, MaterialPageRoute(builder: ( context ){
+            return SinglePost( post );
+          }));
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            SizedBox(
+              child: Image(
+                // image: ExactAssetImage('assets/images/placeholder_bg.png'),
+                image: NetworkImage( post.featuredImage ),
+                fit: BoxFit.cover,
+              ),
+              width: 100,
+              height: 100,
             ),
-            width: 100,
-            height: 100,
-          ),
-          SizedBox(
-            width: 16,
-          ),
-          Expanded(
-            child: Column(
-              children: <Widget>[
-                Text(
-                  // 'The World Global Warming Annual Summit',
-                  post.title,
-                  maxLines: 2,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(
-                  height: 18,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('Michael Adams',style: TextStyle(fontSize: 12)),
-                    Row(
-                      children: <Widget>[
-                        Icon(Icons.timer),
-                        // Text('15 min'),
-                        Text( parseHumanDateTime( post.dateWritten ),
-                            style: TextStyle(fontSize: 12)),
+            SizedBox(
+              width: 16,
+            ),
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    // 'The World Global Warming Annual Summit',
+                    post.title,
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('Michael Adams',style: TextStyle(fontSize: 12)),
+                      Row(
+                        children: <Widget>[
+                          Icon(Icons.timer),
+                          // Text('15 min'),
+                          Text( parseHumanDateTime( post.dateWritten ),
+                              style: TextStyle(fontSize: 12)),
 
 
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
