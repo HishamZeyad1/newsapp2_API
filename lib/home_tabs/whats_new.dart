@@ -239,7 +239,7 @@ class _WhatsNewState extends State<WhatsNew> {
                         children: <Widget>[
                           Icon(Icons.timer),
                           // Text('15 min'),
-                          Text(_parseHumanDateTime(post.dateWritten),
+                          Text(parseHumanDateTime(post.dateWritten),
                             style: TextStyle(fontSize: 10),),
                         ],
                       ),
@@ -322,11 +322,7 @@ class _WhatsNewState extends State<WhatsNew> {
   }
 
 
-  String _parseHumanDateTime(String dateTime) {
-    Duration timeAgo = DateTime.now().difference(DateTime.parse(dateTime));
-    DateTime theDifference = DateTime.now().subtract(timeAgo);
-    return timeago.format(theDifference);
-  }
+
 
   Widget _drawRecentUpdatesCard(Color color,  Post post) {
     return Card(
@@ -389,7 +385,7 @@ class _WhatsNewState extends State<WhatsNew> {
                   SizedBox(width: 4,),
                   Text(
                     // '15 Min',
-                    _parseHumanDateTime( post.dateWritten ),
+                    parseHumanDateTime( post.dateWritten ),
 
                     style: TextStyle(
                         color: Colors.grey,

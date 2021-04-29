@@ -6,3 +6,4 @@ String whats_new_api = "/api/posts/categories/7";
 String recent_updates_api="/api/posts/categories/2";
 
 String categories_api = "/api/posts/categories/";
+String Comments_api =   "/api/comments/posts/";
