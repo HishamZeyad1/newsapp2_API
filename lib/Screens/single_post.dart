@@ -16,6 +16,9 @@ class SinglePost extends StatefulWidget {
 class _SinglePostState extends State<SinglePost> {
   late CommentsAPI commentsAPI;
   var len=1;
+
+  var index=0;
+
   @override
   Widget build(BuildContext context) {
     commentsAPI=CommentsAPI();
@@ -42,16 +45,18 @@ class _SinglePostState extends State<SinglePost> {
                 return _drawPostDetails();
               } else if (position >=1 && position <=len) {
                 print("######################################["+position.toString()+"]:"+len.toString());
+
                 return _comments();
               } else {
                 return _commentTextEntry();
               }
             }, childCount:len+2),
-
           ),
         ],
+
       ),
     );
+
   }
 
 
@@ -65,7 +70,7 @@ class _SinglePostState extends State<SinglePost> {
     );
   }
 
-  Widget _comments() {
+  Widget _comments() {print("************"+widget.post.id);
     return Padding(
       padding: const EdgeInsets.all(16),
       child: FutureBuilder(
@@ -87,8 +92,7 @@ class _SinglePostState extends State<SinglePost> {
               } else {
                 if (snapShot.hasData) {
                   List<Comment> comments = snapShot.data;len=comments.length;print(len);
-                    Comment Comment1 = comments[0];
-
+                    Comment comment = comments[index];print("commentId:"+comment.id);
                     return Column(
                       children: <Widget>[
                         Row(
@@ -104,7 +108,7 @@ class _SinglePostState extends State<SinglePost> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text('Christina'),
-                                Text(parseHumanDateTime(Comment1.dateWritten)),
+                                Text(parseHumanDateTime(comment.dateWritten)),
                               ],
                             ),
                           ],
@@ -112,7 +116,7 @@ class _SinglePostState extends State<SinglePost> {
                         SizedBox(
                           height: 16,
                         ),
-                        Text( Comment1.content)
+                        Text( comment.content)
                             // 'Weasel the jeeper goodness inconsiderately spelled so ubiquitous amused knitted and altruistic amiable'),
 
                       ],

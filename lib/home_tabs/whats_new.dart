@@ -29,7 +29,6 @@ class _WhatsNewState extends State<WhatsNew> {
           _drawHeader(),
           _drawTopStories(),
           _drawRecentUpdates(),
-
         ],
       ),
     );
