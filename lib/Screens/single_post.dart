@@ -74,7 +74,7 @@ class _SinglePostState extends State<SinglePost> {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: FutureBuilder(
-        future:commentsAPI.fetChCommentsByPostId("7") ,
+        future:commentsAPI.fetChCommentsByPostId("28") ,
         builder:(context,AsyncSnapshot snapShot){
           switch (snapShot.connectionState) {
             case ConnectionState.waiting:

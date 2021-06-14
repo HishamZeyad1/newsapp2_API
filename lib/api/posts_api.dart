@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:news_app2/models/post.dart';
@@ -75,13 +76,14 @@ class PostsAPI {
 
 
   Future<List<Post>> fetChPostsByCategoryId( String id ) async {
+    print("******************************************");
     String whatsNewApi = base_api + categories_api + id;
     var response = await http.get(whatsNewApi);
     List<Post> posts = <Post>[];
     if (response.statusCode == 200) {
       var jsonData = jsonDecode(response.body);
       var data = jsonData["data"];
-
+      print(response.body);
       for (var item in data) {
         Post post = Post(
             id: item["id"].toString(),

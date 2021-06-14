@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../PageModel.dart';
 import 'package:page_view_indicator/page_view_indicator.dart';
 
@@ -124,7 +124,7 @@ class _OnBoardingState extends State<OnBoarding> {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        // _updateSeen();
+                         _updateSeen();
                         return HomeScreen();
                       },
                     ),
@@ -162,10 +162,10 @@ class _OnBoardingState extends State<OnBoarding> {
     );
   }
 
-  // void _updateSeen() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setBool( 'seen' , true);
-  // }
+  void _updateSeen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool( 'seen' , true);
+  }
 }
 
 

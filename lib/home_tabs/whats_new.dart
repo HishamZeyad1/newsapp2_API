@@ -44,7 +44,7 @@ class _WhatsNewState extends State<WhatsNew> {
     );
 
     return FutureBuilder(
-      future:postsAPI.fetChPostsByCategoryId("7"),
+      future:postsAPI.fetChPostsByCategoryId("5"),
       builder: (context,AsyncSnapshot  snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
@@ -136,7 +136,7 @@ class _WhatsNewState extends State<WhatsNew> {
 
               child: FutureBuilder(
                 // future: postsAPI.fetchWhatsNew(),
-                future: postsAPI.fetChPostsByCategoryId( "7" ),
+                future: postsAPI.fetChPostsByCategoryId( "5" ),
                 builder: (context, AsyncSnapshot snapShot) {
                   switch (snapShot.connectionState) {
                     case ConnectionState.waiting:
@@ -320,9 +320,6 @@ class _WhatsNewState extends State<WhatsNew> {
     );
   }
 
-
-
-
   Widget _drawRecentUpdatesCard(Color color,  Post post) {
     return Card(
       child: GestureDetector(
@@ -399,8 +396,5 @@ class _WhatsNewState extends State<WhatsNew> {
       ),
     );
   }
-
-
-
 
 }
