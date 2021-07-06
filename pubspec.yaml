@@ -63,6 +63,19 @@ flutter:
      - assets/images/bg4.png
      - assets/images/lorempixel.jpg
      - assets/images/placeholder_bg.png
+     - assets/images/news/Economy1.jpg
+     - assets/images/news/health news1.png
+     - assets/images/news/political-news.jpg
+     - assets/images/news/Science News.jpeg
+     - assets/images/news/Science News4.jpeg
+     - assets/images/news/Science News5.jpeg
+     - assets/images/news/sportCategory2.jpg
+#     - assets/images/news/technogy news.jpeg
+     - assets/images/news/technogy news1.jpeg
+     - assets/images/news/technogy news3.jpeg
+     - assets/images/news/technogy news4.jpeg
+     - assets/images/news/Tourism news1.jpg
+     - assets/images/news/technogy news1.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

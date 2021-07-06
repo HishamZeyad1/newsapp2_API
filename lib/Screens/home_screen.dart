@@ -5,6 +5,7 @@ import 'package:news_app2/pages/about.dart';
 import 'package:news_app2/pages/contact.dart';
 import 'package:news_app2/pages/help.dart';
 import 'package:news_app2/pages/settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../home_tabs/favourites.dart';
 import '../home_tabs/popular.dart';
@@ -13,9 +14,30 @@ import '../shared_ui/navigation_drawer.dart';
 
 import 'package:news_app2/api/authors_api.dart';
 class HomeScreen extends StatefulWidget {
-
+  List<int> NewsFavoriteList=[];
+  List<SharedPreferences> prefs=[];
+  HomeScreen(){//{List<int> NewsFavoriteList}
+    // this.NewsFavoriteList=NewsFavoriteList;
+    // if(NewsFavoriteList!=null){_updateFollow();}
+  }
   @override
   _HomeScreenState createState() => _HomeScreenState();
+  // void sharedata() async {
+  //   prefs=[];
+  //   prefs.length=7;
+  //   for(int index=0;index<prefs.length;++index){
+  //     prefs[index]=await  SharedPreferences.getInstance();
+  //   }
+  // }
+  // void _updateFollow() {
+  //   sharedata();
+  //   for(int index=0;index<NewsFavoriteList!.length;++index){
+  //     print("**************************************************************");
+  //     prefs[NewsFavoriteList![index]].setBool('follow' ,true);
+  //   }
+  //   // print(prefs);
+  // }
+
 }
 enum PopOutMenu { HELP, ABOUT, CONTACT, SETTINGS }
 
@@ -38,8 +60,11 @@ class _HomeScreenState extends State<HomeScreen>with SingleTickerProviderStateMi
     _tabController.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+
     //authorsAPI.fetchAllAuthors();
     // categoriesAPI.fetchCategories();
     //postsAPI.fetchWhatsNew();

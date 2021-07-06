@@ -5,5 +5,6 @@ class Author{
   String email;
   String avatar;
 
-  Author(this.id, this.name, this.email, this.avatar);
+  Author({required this.id, required this.name,required this.email,required this.avatar});
+
 }

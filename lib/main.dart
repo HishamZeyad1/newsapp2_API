@@ -7,14 +7,14 @@ import 'utilities/app_theme.dart';
 void main() async{/*async*/
   WidgetsFlutterBinding.ensureInitialized();
 
-  SharedPreferences prefs = await  SharedPreferences.getInstance();
-  bool? seen = prefs.getBool('seen');
+  // SharedPreferences prefs = await  SharedPreferences.getInstance();
+  // bool? seen = prefs.getBool('seen');
    Widget _screen;
-  if( seen == null || seen == false ){
+  // if( seen == null || seen == false ){
     _screen = OnBoarding();
-  }else{
-    _screen = HomeScreen();
-  }
+  // }else{
+  //   _screen = HomeScreen();
+  // }
   //_screen = HomeScreen();
   print(_screen);
   runApp(NewsApp(_screen));//NewsApp(_screen)

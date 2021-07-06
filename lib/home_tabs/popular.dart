@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:news_app2/Screens/single_post.dart';
+import 'package:news_app2/api/authors_api.dart';
 import 'package:news_app2/api/posts_api.dart';
+import 'package:news_app2/models/author.dart';
 import 'package:news_app2/models/post.dart';
 import 'package:news_app2/utilities/data_utilities.dart';
 class Popular extends StatefulWidget {
@@ -10,6 +12,8 @@ class Popular extends StatefulWidget {
 
 class _PopularState extends State<Popular> {
   PostsAPI postsAPI = PostsAPI();
+
+  AuthorsAPI authorsAPI=new AuthorsAPI();
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +96,24 @@ class _PopularState extends State<Popular> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('Michael Adams',style: TextStyle(fontSize: 12)),
+                      // Text('Michael Adams',style: TextStyle(fontSize: 12)),
+                      Container(
+                          child:FutureBuilder(
+                              future:authorsAPI.fetChAuthorsByPostId(post.userId.toString()),
+                              builder: (context,AsyncSnapshot  snapShot) {
+                                switch (snapShot.connectionState) {
+                                  case ConnectionState.waiting:return loading(); break;
+                                  case ConnectionState.active: return loading(); break;
+                                  case ConnectionState.none: return connectionError();break;
+                                  case ConnectionState.done:
+                                    if (snapShot.error != null) {return error(snapShot.error);}
+                                    else {
+                                      if (snapShot.hasData) {
+                                        Author author = snapShot.data;
+                                        return Text(author.name, style: TextStyle(fontSize: 12),);
+                                      }else {return noData();}
+                                    };break;}})),
+
                       Row(
                         children: <Widget>[
                           Icon(Icons.timer),

@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app2/Screens/single_post.dart';
+import 'package:news_app2/api/authors_api.dart';
 
 import 'package:news_app2/api/posts_api.dart';
+import 'package:news_app2/models/author.dart';
 import 'dart:async';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:news_app2/models/post.dart';
@@ -17,10 +19,17 @@ class WhatsNew extends StatefulWidget {
 
 class _WhatsNewState extends State<WhatsNew> {
   late PostsAPI postsAPI;
-
+  late AuthorsAPI authorsAPI;
   @override
   Widget build(BuildContext context) {
     postsAPI = PostsAPI();
+    authorsAPI=AuthorsAPI();
+    Future<Author> aut=authorsAPI.fetChAuthorsByPostId("2");
+    // print("*********************" );
+    // // print(aut );
+    // authorsAPI.fetChAuthorsByPostId("2");
+    // // postsAPI.fetChPostsByCategoryId("2");
+    // print("*********************" );
 
     return SingleChildScrollView(
       child: Column(
@@ -173,8 +182,7 @@ class _WhatsNewState extends State<WhatsNew> {
                         } else {
                           return noData();
                         }
-                      }
-                      break;
+                      };                      break;
                   }
                 },
               ),
@@ -205,7 +213,8 @@ class _WhatsNewState extends State<WhatsNew> {
           }));
         },
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
               //   child: Image(
@@ -216,9 +225,9 @@ class _WhatsNewState extends State<WhatsNew> {
               width: 100,
               height: 100,
             ),
-            SizedBox(
-              width: 16,
-            ),
+            // SizedBox(
+            //   width: 16,
+            // ),
             Expanded(
               child: Column(
                 children: <Widget>[
@@ -226,14 +235,31 @@ class _WhatsNewState extends State<WhatsNew> {
                     post.title,
                     maxLines: 2,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    textDirection: TextDirection.ltr,
+                    textAlign: TextAlign.start,
                   ),
                   SizedBox(
-                    height: 18,
+                    height: 16,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Text('Michael Adams', style: TextStyle(fontSize: 12),),
+                          Container(
+                            child:FutureBuilder(
+                                future:authorsAPI.fetChAuthorsByPostId(post.userId.toString()),
+                                builder: (context,AsyncSnapshot  snapShot) {
+                                  switch (snapShot.connectionState) {
+                                    case ConnectionState.waiting:return loading(); break;
+                                    case ConnectionState.active: return loading(); break;
+                                    case ConnectionState.none: return connectionError();break;
+                                    case ConnectionState.done:
+                                      if (snapShot.error != null) {return error(snapShot.error);}
+                                      else {
+                                        if (snapShot.hasData) {
+                                          Author author = snapShot.data;
+                                          return Text(author.name, style: TextStyle(fontSize: 12),);
+                                        }else {return noData();}
+                                      };break;}})),
                       Row(
                         children: <Widget>[
                           Icon(Icons.timer),

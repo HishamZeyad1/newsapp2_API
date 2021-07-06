@@ -24,14 +24,14 @@ class CommentsAPI{
             postId: item["post_id"].toString()
         );
         Comments.add(comment);
-        // print(comment.content);
+        print("Comment:"+comment.toString());
       }
     }
     return Comments;
   }
 
   int getSize(){
-    this.len=Comments.length;
+      this.len=Comments.length;
     return len;
   }
 

@@ -8,4 +8,6 @@ String recent_updates_api="/api/posts/categories/2";
 String categories_api = "/api/posts/categories/";
 String Comments_api =   "/api/comments/posts/";
 
+String Author_api="/api/authors/";
+
 String auth_api = "/api/token";
