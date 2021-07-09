@@ -120,11 +120,12 @@ class _OnBoardingState extends State<OnBoarding> {
                   ),
                 ),
                 onPressed: () {
+                  // _updateSeen();
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        // _updateSeen();
                         return HomeScreen();
                       },
                     ),

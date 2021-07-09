@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen>with SingleTickerProviderStateMi
       body: Center(
         child:TabBarView( children: [
           WhatsNew(),
-          Popular(),
+          Popular(3),
           Favourites()
         ] , controller: _tabController,  ),
       ),

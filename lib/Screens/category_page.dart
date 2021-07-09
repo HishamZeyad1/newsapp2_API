@@ -19,7 +19,6 @@ class CategoryPage extends StatefulWidget {
   // final Category category;
 
   // CategoryPage(this.category);
-
   @override
   CategoryPageState createState() {
     return new CategoryPageState();
@@ -30,9 +29,10 @@ class CategoryPageState extends State<CategoryPage>{
   // late PostsAPI postsAPI;
   late List<Category> Categories;
   ValueNotifier<int> _pageViewNotifier = ValueNotifier(0);
-  late List<bool> _checked=[false,false,false,false,false,false,false];
+  late List<bool> _checked=[];
   List<int> NewsFavoriteList=[];
-  late List<SharedPreferences> prefs;
+  late List<SharedPreferences> prefs=[];
+    // late Map<String,bool> map={"key":follow,"value":true};
   bool block=false;
   // Future<void> sharedata() async {
 // // await  SharedPreferences.getInstance();
@@ -42,13 +42,16 @@ class CategoryPageState extends State<CategoryPage>{
 // }
 
   void sharedata() async {
-    prefs=[];
+    _checked=[false,false,false,false,false,false,false];
   prefs.length=_checked.length;
   // bool? _checked[0] = prefs[0].getBool('follow')!;
   for(int index=0;index<prefs.length;++index){
     print("**************************************************************");
     prefs[index]=await  SharedPreferences.getInstance();
-    _checked[index] = prefs[index].getBool('follow')!;
+    _checked[index] = prefs[index].getBool('follow$index')!;
+    bool b=_checked[index];
+    print("############################sharedata##############################");
+    print( "_checked[index]:$b");
   }
   // prefs=[await  SharedPreferences.getInstance(),
   // await  SharedPreferences.getInstance(), await  SharedPreferences.getInstance(),
@@ -59,7 +62,7 @@ class CategoryPageState extends State<CategoryPage>{
   // _checked[4] = prefs[4].getBool('follow')!;_checked[5] = prefs[5].getBool('follow')!;
   // _checked[6] = prefs[6].getBool('follow')!;
   print("############################sharedata##############################");
-  print("prefs[0]:");print(prefs[0].getBool('follow')!);
+  // print("prefs[0]:");print(prefs[0].getBool('follow')!);
   // for(int a=0;a<prefs.length;++a){
   //   // prefs.add(await  SharedPreferences.getInstance());
   //     _checked[a] = prefs[a].getBool('follow')!;
@@ -94,9 +97,16 @@ class CategoryPageState extends State<CategoryPage>{
   // }
 
   @override
+  void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
+    // TODO: implement initState
+    super.initState();
+   sharedata();
+  }
+  @override
   Widget build(BuildContext context) {
     _addCategories();
-    if(!block){sharedata();block=true;}
+    // if(!block){sharedata();block=true;}
     return Scaffold(
       appBar: AppBar(
         title: Text("Categories"),
@@ -126,10 +136,12 @@ class CategoryPageState extends State<CategoryPage>{
                 );
               },
               itemCount: Categories.length,
+
               // onPageChanged: (index) {
               //   _pageViewNotifier.value = index;
               // },
           ),
+
         ),
           Align(
           alignment: Alignment.bottomCenter,
@@ -149,11 +161,11 @@ class CategoryPageState extends State<CategoryPage>{
           ),
           ),
           onPressed: () {
+           _updateFollow();
           Navigator.push(
           context,
           MaterialPageRoute(
           builder: (context) {
-          _updateFollow();
           return HomeScreen();
           },
           ),
@@ -251,13 +263,14 @@ class CategoryPageState extends State<CategoryPage>{
     print( "Hisham Zryad:");
     print(prefs);
     print(prefs.length);//prefs.isEmpty?_checked[index]:prefs[index].getBool('follow')
-    bool? n=prefs.isEmpty?_checked[index]:prefs[index]==null?_checked[index]:prefs[index].getBool('follow');
-    print("result:$n");
+    // bool? n=prefs[index]==null?_checked[index]:prefs[index].getBool('follow$index');
+    // print("result:$n"_checked[index]);
+    print(_checked[index]);
+
     // print("prefs[index]:$prefs[index]");
 
     // print(prefs[index].runtimeType==SharedPreferences);
     // print(prefs[index].getBool('follow'));
-
     return Stack(
      children: <Widget>[
       Card(
@@ -316,14 +329,15 @@ class CategoryPageState extends State<CategoryPage>{
       ),
        CheckboxListTile(
          secondary: Icon(Icons.check),
-         value://_checked[index],
-          prefs.isEmpty?_checked[index]:prefs[index]==null?_checked[index]:prefs[index].getBool('follow'),
+         value:_checked[index],
+          // prefs[index]==null?_checked[index]:prefs[index].getBool('follow$index'),
          // prefs.isEmpty?_checked[index]:prefs[index].getBool('follow'),
          // prefs[index].getBool('follow')==false?_checked[index]:_checked[index],//_checked[index]:,
          onChanged: (bool? value) {
            setState(() {
              _checked[index]=value!;
-             prefs[index].setBool( 'follow' ,_checked[index]);
+             // prefs[index].setBool( 'follow$index' ,_checked[index]);
+             // prefs[index].setBool( 'follow' ,_checked[index]);
 
              if(value==true){
                NewsFavoriteList.add(index);
@@ -353,14 +367,18 @@ class CategoryPageState extends State<CategoryPage>{
     );
   }
 
-  void _updateFollow() {
-    //   SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("###############################################################");
-
-    for(int index=0;index<NewsFavoriteList.length;++index){
+  void _updateFollow(){
+    //
+    // //   SharedPreferences prefs = await SharedPreferences.getInstance();
+    // print("###############################################################");
+    //
+    for(int index=0;index<prefs.length;++index){
       print("**************************************************************");
-        prefs[NewsFavoriteList[index]].setBool('follow' ,true);
-
+      if(_checked[index]){
+        prefs[index].setBool('follow$index' ,true);
+      }else{
+        prefs[index].setBool('follow$index' ,false);
+      }
       // if(_checked[index]){
       //   prefs[index].setBool( 'follow' , true);
       //   print("###############################################################");
@@ -373,7 +391,6 @@ class CategoryPageState extends State<CategoryPage>{
       //   print("###############################################################");
       // }
     }
-
   }
 
 

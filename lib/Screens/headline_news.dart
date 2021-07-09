@@ -50,7 +50,7 @@ class _HeadLineNewsState extends State<HeadLineNews> with TickerProviderStateMix
       body: Center(
         child: TabBarView( children: [
           Favourites(),
-          Popular(),
+          Popular(3),
           Favourites()
         ] , controller: _tabController,  ),
       ),

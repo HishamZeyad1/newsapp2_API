@@ -6,20 +6,26 @@ import 'package:news_app2/models/author.dart';
 import 'package:news_app2/models/post.dart';
 import 'package:news_app2/utilities/data_utilities.dart';
 class Popular extends StatefulWidget {
+  late int id=3;
+
+  Popular( this.id);
+
   @override
-  _PopularState createState() => _PopularState();
+  _PopularState createState() => _PopularState(this.id);
 }
 
 class _PopularState extends State<Popular> {
   PostsAPI postsAPI = PostsAPI();
 
   AuthorsAPI authorsAPI=new AuthorsAPI();
+  late int id;
+  _PopularState(int id){this.id=id;}
 
   @override
   Widget build(BuildContext context) {
 
     return FutureBuilder(
-        future: postsAPI.fetChPostsByCategoryId("3"),
+        future: postsAPI.fetChPostsByCategoryId("$id"),
         builder: (context, AsyncSnapshot snapShot) {
           switch ( snapShot.connectionState ){
             case ConnectionState.none :
@@ -45,7 +51,6 @@ class _PopularState extends State<Popular> {
                     );
                   }, itemCount: posts.length,
                 );
-
               }
           }
 

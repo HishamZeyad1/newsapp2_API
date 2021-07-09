@@ -20,6 +20,7 @@ class WhatsNew extends StatefulWidget {
 class _WhatsNewState extends State<WhatsNew> {
   late PostsAPI postsAPI;
   late AuthorsAPI authorsAPI;
+
   @override
   Widget build(BuildContext context) {
     postsAPI = PostsAPI();
