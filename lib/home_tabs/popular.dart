@@ -99,7 +99,7 @@ class _PopularState extends State<Popular> {
                     height: 18,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       // Text('Michael Adams',style: TextStyle(fontSize: 12)),
                       Container(
@@ -115,7 +115,7 @@ class _PopularState extends State<Popular> {
                                     else {
                                       if (snapShot.hasData) {
                                         Author author = snapShot.data;
-                                        return Text(author.name, style: TextStyle(fontSize: 12),);
+                                        return Text(author.name, style: TextStyle(fontSize: 10),);
                                       }else {return noData();}
                                     };break;}})),
 
@@ -124,7 +124,7 @@ class _PopularState extends State<Popular> {
                           Icon(Icons.timer),
                           // Text('15 min'),
                           Text( parseHumanDateTime( post.dateWritten ),
-                              style: TextStyle(fontSize: 12)),
+                              style: TextStyle(fontSize: 10)),
 
 
                         ],

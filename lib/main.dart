@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:news_app2/api/authors_api.dart';
+import 'package:news_app2/api/posts_api.dart';
+import 'package:news_app2/helper/CacheHelper.dart';
 import 'Screens/OnBoarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/home_screen.dart';
@@ -6,7 +9,7 @@ import 'utilities/app_theme.dart';
 
 void main() async{/*async*/
   WidgetsFlutterBinding.ensureInitialized();
-
+  await CacheHelper.init();
   // SharedPreferences prefs = await  SharedPreferences.getInstance();
   // bool? seen = prefs.getBool('seen');
    Widget _screen;
@@ -17,6 +20,12 @@ void main() async{/*async*/
   // }
   //_screen = HomeScreen();
   print(_screen);
+  // PostsAPI postsAPI=new PostsAPI();
+  // postsAPI.fetChSinglePosts("1");
+
+  // AuthorsAPI a=new AuthorsAPI();
+  // a.fetChAuthorsByPostId("1");
+
   runApp(NewsApp(_screen));//NewsApp(_screen)
 }
 

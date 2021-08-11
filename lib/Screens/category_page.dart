@@ -8,6 +8,7 @@ import 'package:news_app2/api/posts_api.dart';
 import 'package:news_app2/api/posts_api.dart';
 import 'package:news_app2/api/posts_api.dart';
 import 'package:news_app2/api/posts_api.dart';
+import 'package:news_app2/helper/CacheHelper.dart';
 import 'package:news_app2/models/category.dart';
 import 'package:news_app2/models/post.dart';
 import 'package:news_app2/shared_ui/navigation_drawer.dart';
@@ -27,10 +28,11 @@ class CategoryPage extends StatefulWidget {
 
 class CategoryPageState extends State<CategoryPage>{
   // late PostsAPI postsAPI;
-  late List<Category> Categories;
+  late List<Category> Categories=[];
   ValueNotifier<int> _pageViewNotifier = ValueNotifier(0);
-  late List<bool> _checked=[];
-  List<int> NewsFavoriteList=[];
+  late List<bool> _checked=[false,false,false,false,false,false,false];
+
+  late List<int> NewsFavoriteList=[];
   late List<SharedPreferences> prefs=[];
     // late Map<String,bool> map={"key":follow,"value":true};
   bool block=false;
@@ -40,7 +42,6 @@ class CategoryPageState extends State<CategoryPage>{
 //   // bool? seen = prefs[2].getBool('follow');  bool? seen = prefs[3].getBool('follow');
 //   // bool? seen = prefs[4].getBool('follow');  bool? seen = prefs[5].getBool('follow');
 // }
-
   void sharedata() async {
     _checked=[false,false,false,false,false,false,false];
   prefs.length=_checked.length;
@@ -68,10 +69,8 @@ class CategoryPageState extends State<CategoryPage>{
   //     _checked[a] = prefs[a].getBool('follow')!;
   //   }
 }
-
   void _addCategories() {
     Categories = <Category>[];
-
     Categories.add(Category("1","Policy", 'assets/images/news/political-news.jpg'));
     Categories.add(Category("2","Economy", 'assets/images/news/Economy1.jpg'));
     Categories.add(Category("3","Sport", 'assets/images/news/sportCategory2.jpg'));
@@ -95,18 +94,25 @@ class CategoryPageState extends State<CategoryPage>{
   //   super.initState();
   //   sharedata();
   // }
-
   @override
   void initState() {
     WidgetsFlutterBinding.ensureInitialized();
     // TODO: implement initState
     super.initState();
-   sharedata();
+   // sharedata();
+    for(int i=0;i<7;++i){
+      _checked[i] =(CacheHelper.getbool(key:"check$i")==null?_checked[i]:CacheHelper.getbool(key:"check$i"))!;
+    }
   }
   @override
   Widget build(BuildContext context) {
     _addCategories();
-    // if(!block){sharedata();block=true;}
+    // if(!block){
+    //   for(int i=0;i<7;++i){
+    //     _checked[i] =(CacheHelper.getbool(key:"check$i")==null?_checked[i]:CacheHelper.getbool(key:"check$i"))!;
+    //   }
+    //   ;block=true;}
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Categories"),
@@ -117,7 +123,6 @@ class CategoryPageState extends State<CategoryPage>{
         //   // _popOutMenu(context),
         //
         // ],
-
       ),
       drawer: NavigationDrawer(),
       body:Stack(
@@ -266,7 +271,6 @@ class CategoryPageState extends State<CategoryPage>{
     // bool? n=prefs[index]==null?_checked[index]:prefs[index].getBool('follow$index');
     // print("result:$n"_checked[index]);
     print(_checked[index]);
-
     // print("prefs[index]:$prefs[index]");
 
     // print(prefs[index].runtimeType==SharedPreferences);
@@ -321,7 +325,6 @@ class CategoryPageState extends State<CategoryPage>{
               Padding(
                 padding: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 0),
                 // padding: EdgeInsets.all(0),
-
               ),
             ],
           ),
@@ -335,18 +338,21 @@ class CategoryPageState extends State<CategoryPage>{
          // prefs[index].getBool('follow')==false?_checked[index]:_checked[index],//_checked[index]:,
          onChanged: (bool? value) {
            setState(() {
-             _checked[index]=value!;
+             _checked[index]=!_checked[index];
+             // CacheHelper.putbool(key: "check${index}", value: value!);
+
+             // _checked[index]=value!;
              // prefs[index].setBool( 'follow$index' ,_checked[index]);
              // prefs[index].setBool( 'follow' ,_checked[index]);
-
-             if(value==true){
-               NewsFavoriteList.add(index);
-               // prefs[index].setBool( 'follow' ,true);
-             }else{
-               NewsFavoriteList.remove(index);
-               // prefs[index].setBool( 'follow' , false);
-             }
-             print(NewsFavoriteList);
+             // if(value==true){
+             //   NewsFavoriteList.add(index);
+             //   // prefs[index].setBool( 'follow' ,true);
+             // }else{
+             //   NewsFavoriteList.remove(index);
+             //   // prefs[index].setBool( 'follow' , false);
+             // }
+             print("NewsFavoriteList$NewsFavoriteList");
+             // print(NewsFavoriteList);
              // NewsFavoriteList.add(index);
              // print(NewsFavoriteList);
            });
@@ -372,13 +378,18 @@ class CategoryPageState extends State<CategoryPage>{
     // //   SharedPreferences prefs = await SharedPreferences.getInstance();
     // print("###############################################################");
     //
-    for(int index=0;index<prefs.length;++index){
+      for(int index=0;index<_checked.length;++index){
       print("**************************************************************");
-      if(_checked[index]){
-        prefs[index].setBool('follow$index' ,true);
-      }else{
-        prefs[index].setBool('follow$index' ,false);
-      }
+      CacheHelper.putbool(key: "check${index}", value:_checked[index]);
+
+        // if(_checked[index]){
+      //   // prefs[NewsFavoriteList[index]].setBool('check${NewsFavoriteList[index]}' ,true);
+      //   // CacheHelper.putbool(key: "check${NewsFavoriteList[index]}", value:true);
+      //   CacheHelper.putbool(key: "check${index}", value:true);
+      // }else{
+      //   // prefs[index].setBool('check$index' ,false);
+      //   CacheHelper.putbool(key: "check${index}", value:false);
+      // }
       // if(_checked[index]){
       //   prefs[index].setBool( 'follow' , true);
       //   print("###############################################################");

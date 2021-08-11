@@ -37,7 +37,9 @@ class AuthorsAPI {
     // print("response.body:"+response.body.toString());
     if (response.statusCode == 200) {
       var jsonData = jsonDecode(response.body);
-      // var data = jsonData["data"];
+      var data = jsonData["data"];
+      print(jsonData);
+
       // print("*********data***********");
       // print(data[0].toString());
       // print("***********data*********");
